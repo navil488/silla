@@ -1,0 +1,47 @@
+diagrama uml de la fabrica de silla  responsabilidad unica
+
+
+
++-------------------+        +---------------------+
+|     materiales    |        |    Proveedor        |
++-------------------+        +---------------------+
+| - id: int         |        | - id: int           |
+| - nombre: String  |        | - nombre: String    |
+| - precio: double  |        | - direccion: String |
+  -stock :int                | - telefono: String  |
+
++-------------------+         +--------------------+
+                               ^
+                               |
+                               |
+                         +--------------+
+                         |   Inventario |
+                         +--------------+
+                         | - materiales |
+                         | -sillas:
+                         | -stock :unit  |
+                         +--------------+
+                               |
+                               v
+                        +--------------------------+
+                        |   Transacción            |
+                        +---------------------------
+                        | - material:material       |
+                        | - cantidad: int           |
+                        | - fecha: Date             |
+                        +---------------------------+
+                        |                |
+                        v                v
+                   +--------------+      +-----------------------------+
+                   | facturacion   |     |   Pedido                    |
+                   +--------------+      +-----------------------------+
+                   | - serie: Serie|     | - material: material        |
+                   | - numero: int |     | - cantidad: int             |
+                   | - fecha: Date |     |- fecha: Date                |
+                   | -cantidad:    |     |
+                     -montopagar:  |
+                   +--------------+      | - proveedor: Proveedor      |
+                                         | - montoAPagar: double       |
+                                           -serie :string
+                                         |                             |
+                                         +-----------------------------+

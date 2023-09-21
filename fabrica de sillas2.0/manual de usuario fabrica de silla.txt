@@ -1,0 +1,73 @@
+------------------------------------------------------------------------
+               manual de usuario
+----------------------------------------------------------------------
+
+
+
+fabrica de sillas
+
+
+
+programacion ||
+
+ingeniero :luis fernando 
+
+lester navil perez marroquin 7690-20-1411
+
+
+
+-------------------------------------------------------------------------
+
+                           tabla de contenido
+-------------------------------------------------------------------------
+objetivo del documento
+objetivo 
+introduccion
+desarrollo del manuel de usuario 
+--------------------------------------------------------------------------
+
+Objetivo del documento
+
+En el presente documento pretendemos mostrar al usuario el funcionamiento del proyecto
+ el cual consiste en el uso de un un ssitema de fabrica de silla
+
+Objetivos 
+
+Se pretende mostrar de una manera clara y concisa el funcionamiento de la realisaccion y
+ transaccion de un pedido
+
+Introducción
+
+Este proyecto en si consiste en ejecutar según las indicaciones solicitadas 
+en el programa la gestión de una fabrica de silla para cada proceso el cual el lenguaje de
+ programación usado para este proyecto fue java Y algunas de sus restricciones 
+como por ejemplo es la acción de no poder mostrar gráficamente los procesos, 
+sino que te lo da directamente grasias
+
+
+Desarrollo del Manual de Usuario 
+
+ala hora de ejecutar  el programa   este te mostrara un menu  el caul  deveremos elejir que es lo que bamos a realisar 
+
+primero la opcio 1:
+
+el cual es el de agragar material  el caul es la opcion 1
+ mediabes lla hemos seleccionado nos pedira  el id del material el cual esta reconocido como numero
+ ahi elejes cualquier numero que quieras asiganlarle
+luego solisitara el nombre del material que deseas registrar ejemplo madera
+luego solisitara el precio del material registrado  ejemplo 21
+luego solisitara la cantidad que hay  en stock  ejemplo 100
+ 
+
+2. Registrar transacción
+
+si elijes esta opcion  lla deverias aver registrado  los materiales aparecesa esta opcion:
+Seleccione un material (número):  la cual deveras colcar el numero que previamentre hayas asignado en id en nuestro caso el 1 como ejemplo
+luyego  nos aparesera:  Ingrese la cantidad de material: en la cual ingresaremos cuanto material nesesitamos  que no superen lo registrado anteriormente  ejemplo 20 luego solicitara  que ingresemos la fecha  de la transaccion
+que esta  an año mes dia  como ejemplo 2023-9-20 
+y colocara  que la transacccion a sido registrada con exito 
+
+3. Realizar pedido
+
+
+
