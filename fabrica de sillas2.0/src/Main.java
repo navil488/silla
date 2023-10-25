@@ -1,165 +1,284 @@
-
+import java.sql.*;
+import java.util.Date;
 import java.util.Scanner;
-import java.util.ArrayList;
-import java.util.List
-;
 
 public class Main {
+    private static Connection conexion;
+
     public static void main(String[] args) {
+        conectarABaseDeDatos();
+        mostrarMenu();
+    }
+
+    private static void conectarABaseDeDatos() {
+        String jdbcUrl = "jdbc:mariadb://localhost:3306/bd_fabrica";
+        String usuario = "root";
+        String contraseña = "123456";
+        try {
+            conexion = DriverManager.getConnection(jdbcUrl, usuario, contraseña);
+            System.out.println("Conexión a la base de datos exitosa.");
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("No se pudo conectar a la base de datos.");
+        }
+    }
+
+    private static void mostrarMenu() {
         Scanner scanner = new Scanner(System.in);
-        ArrayList<Ma1terial> material = new ArrayList<>();
-        List<Inventario> inventario = new ArrayList<>();
-        List<Transaccion> transacciones = new ArrayList<>();
-        List<Pedido> pedidos = new ArrayList<>();
-
-        while (true) {
-            System.out.println("Menú:");
-            System.out.println("1. Agregar material");
-            System.out.println("2. Registrar transacción");
-            System.out.println("3. Realizar pedido");
-            System.out.println("4. Salir");
-            System.out.print("Seleccione una opción: ");
-
-            int opcion = scanner.nextInt();
-            scanner.nextLine();  // Consumir la nueva línea después del número
+        int opcion;
+        do {
+            System.out.println("\nMenú de Operaciones:");
+            System.out.println("1. Consultar Materiales");
+            System.out.println("2. Registrar Material");
+            System.out.println("3. Consultar Proveedores");
+            System.out.println("4. Registrar Proveedor");
+            System.out.println("5. Realizar Pedido");
+            System.out.println("6. Facturar");
+            System.out.println("7. Salir");
+            System.out.print("Elige una opción: ");
+            opcion = scanner.nextInt();
 
             switch (opcion) {
                 case 1:
-                    //  agregar material al inventario
-                    // Solicitar al usuario los datos del nuevo material
-                    System.out.print("Ingrese el ID del material: ");
-                    int id = scanner.nextInt();
-                    scanner.nextLine(); // Consumir la nueva línea
-
-                    System.out.print("Ingrese el nombre del material: ");
-                    String nombre = scanner.nextLine();
-
-                    System.out.print("Ingrese el precio del material: ");
-                    double precio = scanner.nextDouble();
-                    scanner.nextLine(); // Consumir la nueva línea
-
-                    System.out.print("Ingrese la cantidad en stock: ");
-                    int stock = scanner.nextInt();
-                    scanner.nextLine(); // Consumir la nueva línea
-
-                    // Crear una nueva instancia de Material con los datos proporcionados
-                    Material nuevoMaterial = new Material();
-
-                    // Agregar el nuevo material al inventario
-                    material.add(nuevoMaterial);
-
-                    System.out.println("Material agregado al inventario.");
-
+                    consultarMateriales();
                     break;
                 case 2:
-                    // registrar una transacción
-                    // Mostrar lista de materiales disponibles
-                    System.out.println("Lista de materiales disponibles:");
-                    for (int i = 0; i < material.size(); i++) {
-                        Ma1terial Material = material.get(i);
-                        System.out.println(i + 1 + ". " + material.getClass());
-                    }
-
-                    // Solicitar al usuario seleccionar un material
-                    System.out.print("Seleccione un material (número): ");
-                    int materialIndex = scanner.nextInt();
-                    scanner.nextLine(); // Consumir la nueva línea
-
-                    if (materialIndex < 1 || materialIndex > material.size()) {
-                        System.out.println("Opción no válida.");
-                        break;
-                    }
-
-                    Material materialSeleccionado = (Material) material.get(materialIndex - 1);
-
-                    // Solicitar la cantidad y la fecha de la transacción
-                    System.out.print("Ingrese la cantidad de material: ");
-                    int cantidad = scanner.nextInt();
-                    scanner.nextLine(); // Consumir la nueva línea
-
-                    System.out.print("Ingrese la fecha de la transacción (YYYY-MM-DD): ");
-                    String fechaStr = scanner.nextLine();
-                    // Puedes convertir la cadena de fecha a un objeto Date usando SimpleDateFormat
-
-                    // Registrar la transacción
-                    Transaccion transaccion = new Transaccion();
-                    transacciones.add(transaccion);
-
-                    System.out.println("Transacción registrada con éxito.");
-
-
-
+                    registrarMaterial();
                     break;
                 case 3:
-                    //  realizar un pedido
-// Solicitar al usuario el nombre del material
-                    System.out.print("Ingrese el nombre del material a pedir: ");
-                    String nombreMaterial = scanner.nextLine();
-
-                    // Buscar el material por nombre en la lista de materiales
-                    Material materialPedido = null;
-                    for (Ma1terial Material : material) {
-                        if (Material.getClass().equals(nombreMaterial)) {
-                            materialPedido = (Main.Material) Material;
-                            break;
-                        }
-                    }
-
-                    if (materialPedido == null) {
-                        System.out.println("Material no encontrado. Verifique el nombre.");
-                        break;
-                    }
-
-                    // Solicitar al usuario la cantidad y la fecha del pedido
-                    System.out.print("Ingrese la cantidad a pedir: ");
-                    int cantidadPedido = scanner.nextInt();
-                    scanner.nextLine(); // Consumir la nueva línea
-
-                    System.out.print("Ingrese la fecha del pedido (YYYY-MM-DD): ");
-                    String fechaPedidoStr = scanner.nextLine();
-                    // Puedes convertir la cadena de fecha a un objeto Date usando SimpleDateFormat
-
-                    // Crear una instancia de Pedido con los datos ingresados
-                    Pedido pedido = new Pedido();
-                    pedidos.add(pedido);
-
-                    System.out.println("Pedido realizado con éxito.");
-
-
+                    consultarProveedores();
                     break;
-
-
                 case 4:
-                    System.out.println("Saliendo del programa...");
-                    System.exit(0);
+                    registrarProveedor();
+                    break;
+                case 5:
+                    realizarPedido();
+                    break;
+                case 6:
+                    facturar();
+                    break;
+                case 7:
+                    System.out.println("Saliendo...");
+                    break;
                 default:
-                    System.out.println("Opción no válida. Por favor, seleccione una opción válida.");
+                    System.out.println("Opción no válida.");
                     break;
             }
+        } while (opcion != 7);
+        scanner.close();
+    }
+
+        private static void consultarMateriales() {
+            try {
+                // Crear y ejecutar una consulta SQL para obtener los materiales
+                String consultaSQL = "SELECT * FROM materiales";
+                Statement statement = conexion.createStatement();
+                ResultSet resultado = statement.executeQuery(consultaSQL);
+
+                // Procesar y mostrar los resultados
+                System.out.println("Materiales disponibles:");
+                while (resultado.next()) {
+                    int id = resultado.getInt("id");
+                    String nombre = resultado.getString("nombre");
+                    double precio = resultado.getDouble("precio");
+                    int stock = resultado.getInt("stock");
+
+                    // Mostrar la información del material
+                    System.out.println("ID: " + id);
+                    System.out.println("Nombre: " + nombre);
+                    System.out.println("Precio: " + precio);
+                    System.out.println("Stock: " + stock);
+                    System.out.println("-----");
+                }
+
+                // Cerrar recursos (ResultSet y Statement)
+                resultado.close();
+                statement.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+                System.out.println("Error al consultar materiales.");
+            }
+        }
+
+
+
+    private static void registrarMaterial() {
+        try {
+            // Solicitar información del nuevo material al usuario
+            Scanner scanner = new Scanner(System.in);
+            System.out.print("Nombre del material: ");
+            String nombre = scanner.nextLine();
+            System.out.print("Precio del material: ");
+            double precio = scanner.nextDouble();
+            System.out.print("Stock del material: ");
+            int stock = scanner.nextInt();
+
+            // Crear y ejecutar una consulta SQL para insertar el nuevo material
+            String consultaSQL = "INSERT INTO materiales (nombre, precio, stock) VALUES (?, ?, ?)";
+            PreparedStatement statement = conexion.prepareStatement(consultaSQL);
+            statement.setString(1, nombre);
+            statement.setDouble(2, precio);
+            statement.setInt(3, stock);
+            int filasAfectadas = statement.executeUpdate();
+
+            // Verificar si la inserción fue exitosa
+            if (filasAfectadas > 0) {
+                System.out.println("Material registrado con éxito.");
+            } else {
+                System.out.println("Error al registrar el material.");
+            }
+
+            // Cerrar recursos (PreparedStatement)
+            statement.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("Error al registrar material.");
+        }
+
+
+
+
+    }
+
+    private static void consultarProveedores() {
+        try {
+            // Crear y ejecutar una consulta SQL para obtener los proveedores
+            String consultaSQL = "SELECT * FROM proveedores";
+            Statement statement = conexion.createStatement();
+            ResultSet resultado = statement.executeQuery(consultaSQL);
+
+            // Procesar y mostrar los resultados
+            System.out.println("Proveedores disponibles:");
+            while (resultado.next()) {
+                int id = resultado.getInt("id");
+                String nombre = resultado.getString("nombre");
+                String direccion = resultado.getString("direccion");
+                String telefono = resultado.getString("telefono");
+
+                // Mostrar la información del proveedor
+                System.out.println("ID: " + id);
+                System.out.println("Nombre: " + nombre);
+                System.out.println("Dirección: " + direccion);
+                System.out.println("Teléfono: " + telefono);
+                System.out.println("-----");
+            }
+
+            // Cerrar recursos (ResultSet y Statement)
+            resultado.close();
+            statement.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("Error al consultar proveedores.");
+        }
+
+    }
+
+    private static void registrarProveedor() {
+        try {
+            // Solicitar información del nuevo proveedor al usuario
+            Scanner scanner = new Scanner(System.in);
+            System.out.print("Nombre del proveedor: ");
+            String nombre = scanner.nextLine();
+            System.out.print("Dirección del proveedor: ");
+            String direccion = scanner.nextLine();
+            System.out.print("Teléfono del proveedor: ");
+            String telefono = scanner.nextLine();
+
+            // Crear y ejecutar una consulta SQL para insertar el nuevo proveedor
+            String consultaSQL = "INSERT INTO proveedores (nombre, direccion, telefono) VALUES (?, ?, ?)";
+            PreparedStatement statement = conexion.prepareStatement(consultaSQL);
+            statement.setString(1, nombre);
+            statement.setString(2, direccion);
+            statement.setString(3, telefono);
+            int filasAfectadas = statement.executeUpdate();
+
+            // Verificar si la inserción fue exitosa
+            if (filasAfectadas > 0) {
+                System.out.println("Proveedor registrado con éxito.");
+            } else {
+                System.out.println("Error al registrar el proveedor.");
+            }
+
+            // Cerrar recursos (PreparedStatement)
+            statement.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("Error al registrar proveedor.");
+        }
+
+    }
+
+    private static void realizarPedido() {
+        try {
+            // Solicitar información del pedido al usuario
+            Scanner scanner = new Scanner(System.in);
+            System.out.print("ID del material: ");
+            int idMaterial = scanner.nextInt();
+            System.out.print("ID del proveedor: ");
+            int idProveedor = scanner.nextInt();
+            System.out.print("Cantidad: ");
+            int cantidad = scanner.nextInt();
+
+            // Obtener la fecha actual
+            Date fecha = new Date();
+
+            // Crear y ejecutar una consulta SQL para registrar el pedido
+            String consultaSQL = "INSERT INTO transacciones (id_material, id_proveedor, cantidad, fecha) VALUES (?, ?, ?, ?)";
+            PreparedStatement statement = conexion.prepareStatement(consultaSQL);
+            statement.setInt(1, idMaterial);
+            statement.setInt(2, idProveedor);
+            statement.setInt(3, cantidad);
+            statement.setDate(4, new java.sql.Date(fecha.getTime()));
+            int filasAfectadas = statement.executeUpdate();
+
+            // Verificar si el pedido fue registrado con éxito
+            if (filasAfectadas > 0) {
+                System.out.println("Pedido registrado con éxito.");
+            } else {
+                System.out.println("Error al registrar el pedido.");
+            }
+
+            // Cerrar recursos (PreparedStatement)
+            statement.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("Error al realizar el pedido.");
         }
     }
 
-    private static class Inventario {
-    }
+    private static void facturar() {
+        try {
+            // Solicitar información de la factura al usuario
+            Scanner scanner = new Scanner(System.in);
+            System.out.print("Número de factura: ");
+            String numeroFactura = scanner.nextLine();
+            System.out.print("Monto a pagar: ");
+            double montoAPagar = scanner.nextDouble();
 
-    private static class Transaccion {
-    }
+            // Obtener la fecha actual
+            Date fecha = new Date();
 
-    private static class Pedido {
-    }
+            // Crear y ejecutar una consulta SQL para registrar la factura
+            String consultaSQL = "INSERT INTO facturas (numero, fecha, monto_a_pagar) VALUES (?, ?, ?)";
+            PreparedStatement statement = conexion.prepareStatement(consultaSQL);
+            statement.setString(1, numeroFactura);
+            statement.setDate(2, new java.sql.Date(fecha.getTime()));
+            statement.setDouble(3, montoAPagar);
+            int filasAfectadas = statement.executeUpdate();
 
-    private static class Material extends Ma1terial {
-        private String nombre;
+            // Verificar si la factura fue registrada con éxito
+            if (filasAfectadas > 0) {
+                System.out.println("Factura registrada con éxito.");
+            } else {
+                System.out.println("Error al registrar la factura.");
+            }
 
-        public String getNombre() {
-            return nombre;
+            // Cerrar recursos (PreparedStatement)
+            statement.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("Error al facturar.");
         }
 
-        public void setNombre(String nombre) {
-            this.nombre = nombre;
-        }
-    }
-
-    private static class Ma1terial {
     }
 }

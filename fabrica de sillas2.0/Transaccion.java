@@ -1,7 +1,7 @@
 import java.util.Date;
 
 public class Transaccion {
-    private date material;
+    private Material material;
     private int cantidad;
     private Date fecha;
 

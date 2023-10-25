@@ -1,7 +1,7 @@
 import java.util.Date;
 
 public class Pedido {
-    private date material;
+    private Material material;
     private int cantidad;
     private Date fecha;
     private Proveedor proveedor;
@@ -9,7 +9,7 @@ public class Pedido {
     private String serie;
 
     // Constructor y métodos getters y setters
-    public Pedido(date material, int cantidad, Date fecha, Proveedor proveedor, double montoAPagar, String serie) {
+    public Pedido(Material material, int cantidad, Date fecha, Proveedor proveedor, double montoAPagar, String serie) {
         this.material = material;
         this.cantidad = cantidad;
         this.fecha = fecha;
